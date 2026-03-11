@@ -1,0 +1,35 @@
+Port meson build script to C99.  The _Thread_local check used
+an implicit int.  Future compilers are likely to reject missing
+int types by default.
+
+Patch configure.ac as well, although it is not used by the current
+Fedora build.
+
+Submitted upstream: <https://github.com/p11-glue/p11-kit/pull/451>
+
+diff --git a/configure.ac b/configure.ac
+index be3af55093874750..fc719c78c99c2ac3 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -148,7 +148,7 @@ if test "$os_unix" = "yes"; then
+ 		[ac_cv_tls_keyword=
+ 		for keyword in _Thread_local __thread; do
+ 		AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <stdlib.h>]],
+-			[[static ]$keyword[ foo;]])],
++			[[static ]$keyword[ int foo;]])],
+ 			[ac_cv_tls_keyword=$keyword])
+ 		done])
+ 	if test -n "$ac_cv_tls_keyword"; then
+diff --git a/meson.build b/meson.build
+index 64bb3429aef1bb79..aaa3c1f50b5b943f 100644
+--- a/meson.build
++++ b/meson.build
+@@ -200,7 +200,7 @@ if host_system != 'windows'
+   tls_test_code_template = '''
+ #include <stdlib.h>
+ int main (void) {
+-static @0@ foo;
++static @0@ int foo;
+ return 0;
+ }
+ '''
