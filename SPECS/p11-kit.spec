@@ -12,7 +12,7 @@
 
 # This spec file has been automatically updated
 Version:        0.24.1
-Release: %{?xsrel}%{?dist}
+Release: %{?xsrel}~XCPNG2698.8%{?dist}
 Name:           p11-kit
 Summary:        Library for loading and sharing PKCS#11 modules
 
